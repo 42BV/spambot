@@ -1,0 +1,32 @@
+{
+  "name": "SpamBot",
+  "version": "0.0.0",
+  "description": "HipChat bot listening to webhooks and able to send instructions to HipChat via hipChatter. Node.js",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha -R spec -r should tests --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://Pouja@github.com/42bv/spambot"
+  },
+  "keywords": [
+    "nodejs",
+    "hipchat",
+    "bot",
+    "42bv"
+  ],
+  "author": "",
+  "license": "Apache version 2.0",
+  "bugs": {
+    "url": "https://github.com/42bv/spambot/issues"
+  },
+  "homepage": "https://github.com/42bv/spambot",
+  "dependencies": {
+    "hipchatter": "^0.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.1.0",
+    "should": "^4.6.0"
+  }
+}
