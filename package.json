@@ -23,7 +23,10 @@
   },
   "homepage": "https://github.com/42bv/spambot",
   "dependencies": {
-    "hipchatter": "^0.2.0"
+    "debug": "^2.1.1",
+    "express": "^4.11.0",
+    "hipchatter": "^0.2.0",
+    "lodash": "^2.4.1"
   },
   "devDependencies": {
     "mocha": "^2.1.0",
