@@ -1,5 +1,5 @@
 var express = require('express');
-var Hipchatter = require('hipchatter');
+var Hipchatter = require('./hipchatter');
 var config = require('./config.js');
 var _ = require('lodash');
 var debug = require('debug')('app');
@@ -21,8 +21,6 @@ var plugins = [];
     name: 'apiKey',
     type: String
 }]);
-
-var hipchatter = new Hipchatter(config.apiKey);
 
 _.each(config.plugins, function(plugin) {
     plugins.push(require('./plugins/' + plugin));
