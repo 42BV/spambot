@@ -30,7 +30,7 @@ _.each(config.plugins, function(plugin) {
     debug('Loaded plugin: ' + plugin);
 });
 
-(new Poller(plugins, 3,
+(new Poller(3,
     function() {
         return hipchatter.history('testbotroom');
     },
