@@ -1,9 +1,9 @@
-var express = require('express');
 var Hipchatter = require('./hipchatter');
 var config = require('./config.js');
 var _ = require('lodash');
 var debug = require('debug')('app');
 var plugins = [];
+var Poller = require('./poller');
 
 // Check if everyting in the config file has the right type.
 (function(config, required) {
@@ -22,7 +22,27 @@ var plugins = [];
     type: String
 }]);
 
+var hipchatter = new Hipchatter(config.apiKey);
+
 _.each(config.plugins, function(plugin) {
-    plugins.push(require('./plugins/' + plugin));
+    var constr = require('./plugins/' + plugin + '.js');
+    plugins.push(new constr(hipchatter));
     debug('Loaded plugin: ' + plugin);
 });
+
+(new Poller(plugins, 3,
+    function() {
+        return hipchatter.history('testbotroom');
+    },
+    function(message) {
+        _.each(plugins, function(plugin) {
+            _.each(plugin.listeners, function(listener) {
+                if (listener.pattern.test(message.message) && listener.event === message.type) {
+                    if(!plugin[listener.callback]){
+                        console.error('The plugin: ', plugin.name, ' did not implement: ' + listener.callback + '.');
+                    }
+                    plugin[listener.callback](message);
+                }
+            })
+        })
+    })).start();
