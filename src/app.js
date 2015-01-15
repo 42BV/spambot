@@ -28,7 +28,7 @@ var hipchatter = new Hipchatter(config.apiKey);
 // Load all plugins.
 _.each(config.plugins, function(plugin) {
     var constr = require('./plugins/' + plugin + '.js');
-    plugins.push(new constr(hipchatter));
+    plugins.push(new constr(hipchatter, 'testbotroom'));
     debug('Loaded plugin: ' + plugin);
 });
 

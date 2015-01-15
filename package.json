@@ -24,7 +24,6 @@
   "homepage": "https://github.com/42bv/spambot",
   "dependencies": {
     "debug": "^2.1.1",
-    "express": "^4.11.0",
     "hipchatter": "^0.2.0",
     "lodash": "^2.4.1",
     "promise": "^6.1.0"

@@ -53,6 +53,7 @@ module.exports = function(interval, getMessages, process) {
     * @return {Number} the reference to the setInterval.
     */
     self.start = function() {
+        self._looper();
         self.intervalId = setInterval(self._looper, interval * 1000);
         return self.intervalId;
     }
