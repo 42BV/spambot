@@ -22,22 +22,27 @@ var Poller = require('./poller');
     type: String
 }]);
 
+// Creates an instance of the hipchatter wrapper.
 var hipchatter = new Hipchatter(config.apiKey);
 
+// Load all plugins.
 _.each(config.plugins, function(plugin) {
     var constr = require('./plugins/' + plugin + '.js');
     plugins.push(new constr(hipchatter));
     debug('Loaded plugin: ' + plugin);
 });
 
-(new Poller(3,
+// Create a new poller and start running. At this moment 5 is the maximum because of the limited api calls we can make.
+(new Poller(5,
     function() {
+        // For now just always enter the testbotroom.
         return hipchatter.history('testbotroom');
     },
     function(message) {
         _.each(plugins, function(plugin) {
             _.each(plugin.listeners, function(listener) {
                 if (listener.pattern.test(message.message) && listener.event === message.type) {
+                    // In case someone forgot the implement that function.
                     if(!plugin[listener.callback]){
                         console.error('The plugin: ', plugin.name, ' did not implement: ' + listener.callback + '.');
                     }
