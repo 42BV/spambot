@@ -5,19 +5,14 @@ var minimist = require('minimist')(process.argv.slice(2));
 var debug = require('debug')('app');
 
 // Retrieves the password for the XMPP
-var password;
-if (config.password) {
-    password = config.password;
-} else if (minimist.p) {
-    password = minimist.p;
-} else {
-    throw 'No password defined to use the XMPP in the config file or specified with the p flag.';
+if (!minimist.u || !minimist.p) {
+    throw 'You should give the jid (-u) and password (-p) for the bot account or your own account.';
 }
 
 // Create a new bot
 var bot = new Bot({
-    jid: config.jid,
-    password: password
+    jid: minimist.u
+    password: minimist.p
 });
 
 var manager = new require('./manager.js')(bot);
