@@ -3,6 +3,10 @@ var fs = require('fs');
 var _ = require('lodash');
 var debug = require('debug')('manager');
 
+/**
+* Manages all the plugins.
+* @param {Object} bot The bot as created by the package wobot.
+*/
 module.exports = function(bot) {
     var self = {
         plugins: []
@@ -27,8 +31,8 @@ module.exports = function(bot) {
 
     // Load all plugins.
     _.each(getPluginNames(), function(plugin) {
-        var constr = require('./plugins/' + plugin + '.js');
-        self.plugins.push(new constr(bot));
+        var Constr = require('./plugins/' + plugin + '.js');
+        self.plugins.push(new Constr(bot));
         debug('Loaded plugin: ' + plugin);
     });
 

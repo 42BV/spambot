@@ -1,6 +1,4 @@
 var Bot = require('wobot').Bot;
-var _ = require('lodash');
-var config = require('config');
 var minimist = require('minimist')(process.argv.slice(2));
 var debug = require('debug')('app');
 
@@ -11,11 +9,11 @@ if (!minimist.u || !minimist.p) {
 
 // Create a new bot
 var bot = new Bot({
-    jid: minimist.u
+    jid: minimist.u,
     password: minimist.p
 });
 
-var manager = new require('./manager.js')(bot);
+require('./manager.js')(bot);
 
 // Connect to the hipchat server
 bot.connect();
@@ -31,7 +29,7 @@ bot.onMessage(function(channel, from, message) {
 });
 
 bot.onInvite(function(roomJid, fromJid, reason) {
-    Debug('Invite to ' + roomJid + ' by ' + fromJid + ': ' + reason);
+    debug('Invite to ' + roomJid + ' by ' + fromJid + ': ' + reason);
     this.join(roomJid);
 });
 
@@ -43,10 +41,10 @@ bot.onDisconnect(function() {
     debug('Disconnected');
 });
 
-bot.onError(function(error, text, stanza) {
+bot.onError(function(error, text) {
     debug('Error: ' + error + ' (' + text + ')');
 });
 
 bot.onPrivateMessage(function(jid, message) {
-    Debug(jid + ' pm\'d: ' + message);
+    debug(jid + ' pm\'d: ' + message);
 });

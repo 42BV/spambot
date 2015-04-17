@@ -2,16 +2,16 @@ var _ = require('lodash');
 var debug = require('debug')('plugin:vote');
 
 /**
-* The vote plugin, a simple register voting.
-* @param {Object} bot The bot object as defined by the package wobot.
-*/
+ * The vote plugin, a simple register voting.
+ * @param {Object} bot The bot object as defined by the package wobot.
+ */
 var Vote = function(bot) {
-    self = {
+    var self = {
         name: 'Vote',
         polls: []
     };
 
-    bot.onMessage(function(channel, from, message){
+    bot.onMessage(function(channel, from, message) {
         self.onMessage(channel, from, message);
     });
 
@@ -30,11 +30,11 @@ var Vote = function(bot) {
     }];
 
     /**
-    * Called when bot emits 'onMessage'.
-    * @param {String} channel The channel id.
-    * @param {String} from The user that said the message.
-    * @param {String} message The message.
-    */
+     * Called when bot emits 'onMessage'.
+     * @param {String} channel The channel id.
+     * @param {String} from The user that said the message.
+     * @param {String} message The message.
+     */
     self.onMessage = function(channel, from, message) {
         var listener = _.find(self.listeners, function(listener) {
             return listener.pattern.test(message);
@@ -56,7 +56,7 @@ var Vote = function(bot) {
             return p.test(message);
         });
         return message.replace(match, '');
-    }
+    };
 
     /**
      * Called when someones wants to vote for something.
@@ -79,7 +79,7 @@ var Vote = function(bot) {
             }
         }
         debug('a new vote');
-    }
+    };
 
     /**
      * Called when someones wants the current poll standings.
@@ -95,7 +95,7 @@ var Vote = function(bot) {
             bot.message(channel,
                 'The current score for: ' + name + ' are: ' + result.yes + ' voted yes and ' + result.no + ' voted no.');
         }
-    }
+    };
 
     /**
      * Called when someones wants to start a new poll.
@@ -106,6 +106,8 @@ var Vote = function(bot) {
         var name = stripped[0];
         if (!name) {
             bot.message(channel, 'You must pass a name when creating a new poll.');
+        } else if (self.polls[name]) {
+            bot.message(channel, 'There is already a poll with the name ' + name + '.');
         } else {
             self.polls[name] = {
                 yes: 0,
@@ -114,7 +116,7 @@ var Vote = function(bot) {
             bot.message(channel, 'Created the new poll ' + name + '.');
         }
         debug('starting a new poll');
-    }
+    };
 
     /**
      * Called when someones wants to end a poll.
@@ -132,7 +134,9 @@ var Vote = function(bot) {
             delete self.polls[name];
         }
         debug('ending a poll');
-    }
+    };
+
     return self;
 };
+
 module.exports = Vote;
