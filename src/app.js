@@ -1,53 +1,57 @@
-var Hipchatter = require('./hipchatter');
-var config = require('./config.js');
+var Bot = require('wobot').Bot;
 var _ = require('lodash');
+var config = require('config');
+var minimist = require('minimist')(process.argv.slice(2));
 var debug = require('debug')('app');
-var plugins = [];
-var Poller = require('./poller');
 
-// Check if everyting in the config file has the right type.
-(function(config, required) {
-    _.each(required, function(r) {
-        if (!config[r.name]) {
-            throw new Error('Missing attribute: ' + r.name + ' in the config file.');
-        } else if (!config[r.name] instanceof r.type) {
-            throw new Error('Expected type: ' + r.type + ' for ' + r.name + '.');
-        }
-    })
-})(config, [{
-    name: 'plugins',
-    type: Array
-}, {
-    name: 'apiKey',
-    type: String
-}]);
+// Retrieves the password for the XMPP
+var password;
+if (config.password) {
+    password = config.password;
+} else if (minimist.p) {
+    password = minimist.p;
+} else {
+    throw 'No password defined to use the XMPP in the config file or specified with the p flag.';
+}
 
-// Creates an instance of the hipchatter wrapper.
-var hipchatter = new Hipchatter(config.apiKey);
-
-// Load all plugins.
-_.each(config.plugins, function(plugin) {
-    var constr = require('./plugins/' + plugin + '.js');
-    plugins.push(new constr(hipchatter, 'testbotroom'));
-    debug('Loaded plugin: ' + plugin);
+// Create a new bot
+var bot = new Bot({
+    jid: config.jid,
+    password: password
 });
 
-// Create a new poller and start running. At this moment 5 is the maximum because of the limited api calls we can make.
-(new Poller(5,
-    function() {
-        // For now just always enter the testbotroom.
-        return hipchatter.history('testbotroom');
-    },
-    function(message) {
-        _.each(plugins, function(plugin) {
-            _.each(plugin.listeners, function(listener) {
-                if (listener.pattern.test(message.message) && listener.event === message.type) {
-                    // In case someone forgot the implement that function.
-                    if(!plugin[listener.callback]){
-                        console.error('The plugin: ', plugin.name, ' did not implement: ' + listener.callback + '.');
-                    }
-                    plugin[listener.callback](message);
-                }
-            })
-        })
-    })).start();
+var manager = new require('./manager.js')(bot);
+
+// Connect to the hipchat server
+bot.connect();
+
+// The default behaviour of all events that can occur.
+bot.onConnect(function() {
+    debug('Connected');
+    this.join('69596_api_test_room@conf.hipchat.com');
+});
+
+bot.onMessage(function(channel, from, message) {
+    debug(from + ' said in ' + channel + ' the following: ' + message + '.');
+});
+
+bot.onInvite(function(roomJid, fromJid, reason) {
+    Debug('Invite to ' + roomJid + ' by ' + fromJid + ': ' + reason);
+    this.join(roomJid);
+});
+
+bot.onPing(function() {
+    debug('Ping? Pong!');
+});
+
+bot.onDisconnect(function() {
+    debug('Disconnected');
+});
+
+bot.onError(function(error, text, stanza) {
+    debug('Error: ' + error + ' (' + text + ')');
+});
+
+bot.onPrivateMessage(function(jid, message) {
+    Debug(jid + ' pm\'d: ' + message);
+});
