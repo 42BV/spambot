@@ -39,7 +39,7 @@ module.exports = function(wobot, hipchatter) {
         if (!options.message) {
             throw new Error('bot:send expects message to be set.');
         }
-        if (!(options.jid && options.roomId)) {
+        if (!(options.jid || options.roomId)) {
             throw new Error('bot:send expects either \'id\' or \'jid\' to be set.');
         }
         if (options.html || options.color) {
