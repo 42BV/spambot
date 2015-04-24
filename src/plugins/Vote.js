@@ -5,7 +5,7 @@ var debug = require('debug')('plugin:vote');
  * The vote plugin, a simple register voting.
  * @param {Object} bot The bot object as defined by the package wobot.
  */
-var Vote = function(bot) {
+var Vote = function(bot, hipchatter, manager) {
     var self = {
         name: 'Vote',
         polls: []
@@ -119,6 +119,17 @@ var Vote = function(bot) {
     };
 
     /**
+     * Creates the ending message for poll.
+     * @param {Array | Object} poll The results of the poll.
+     * @param {String} name The name of the poll.
+     * @return {String} the message to be send to the room.
+     */
+    var createMessage = function(poll, name) {
+        var message = 'The results are in for ' + name + '!<br/>';
+        return message + poll.yes + ' Voted yes and ' + poll.no + ' voted no.';
+    };
+
+    /**
      * Called when someones wants to end a poll.
      * @param {String} message The message as plain text.
      */
@@ -128,9 +139,13 @@ var Vote = function(bot) {
         if (!self.polls[name]) {
             bot.message(channel, 'Thou shall not end a poll which does not exists!');
         } else {
-            var result = self.polls[name];
-            bot.message(channel,
-                'Results are are here!' + result.yes + ' voted yes and ' + result.no + ' voted no.');
+            var roomId = _.find(manager.rooms, {
+                jid: channel
+            }).id;
+            hipchatter.notify(roomId, {
+                color: 'random',
+                message: createMessage(self.polls[name], name)
+            }, function() {});
             delete self.polls[name];
         }
         debug('ending a poll');

@@ -5,9 +5,15 @@ var bot = {
     onMessage: function() {},
     message: function() {}
 };
+var hipchatter = {
+    notify: function() {}
+};
+var manager = {
+    rooms: []
+};
 describe('Vote', function() {
     beforeEach(function() {
-        vote = new Vote(bot);
+        vote = new Vote(bot, hipchatter, manager);
     });
     describe('#onMessage', function() {
         it('should call the correct function', function(done) {
@@ -49,10 +55,21 @@ describe('Vote', function() {
         });
     });
     describe('#endPoll', function() {
+        it('should give an error when stopping a non-existing poll', function(){
+            bot.message = sinon.spy();
+            vote.endPoll('channel', null, '!poll end theAwesomePollName');
+            bot.message.calledWith('channel', sinon.match(/Thou shall not/)).should.be.ok;
+        });
         it('should properly stop a poll', function() {
             vote.startPoll(null, null, '!poll start theAwesomePollName');
-            vote.endPoll(null, null, '!poll end theAwesomePollName');
+            hipchatter.notify = sinon.spy();
+            manager.rooms.push({
+                jid: 'channel',
+                id: 1
+            });
+            vote.endPoll('channel', null, '!poll end theAwesomePollName');
             vote.polls.should.have.lengthOf(0);
+            hipchatter.notify.calledWith(1).should.be.ok;
         });
     });
     describe('#poll', function() {

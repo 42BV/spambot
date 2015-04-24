@@ -2,15 +2,19 @@ var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
 var debug = require('debug')('manager');
+var Q = require('q');
 
 /**
-* Manages all the plugins.
-* @param {Object} bot The bot as created by the package wobot.
-*/
-module.exports = function(bot) {
+ * Manages all the plugins.
+ * @param {Object} bot The bot as created by the package wobot.
+ */
+module.exports = function(wobot, hipchatter) {
     var self = {
-        plugins: []
+        plugins: [],
+        rooms: []
     };
+
+    var repeatId;
 
     /**
      * Retrieves all the plugin names in the directory /src/plugins/
@@ -32,9 +36,35 @@ module.exports = function(bot) {
     // Load all plugins.
     _.each(getPluginNames(), function(plugin) {
         var Constr = require('./plugins/' + plugin + '.js');
-        self.plugins.push(new Constr(bot));
+        self.plugins.push(new Constr(wobot, hipchatter, self));
         debug('Loaded plugin: ' + plugin);
     });
+
+    /**
+     * Fetches all the rooms with jid and id.
+     */
+    self.fetchRooms = function() {
+        Q.ninvoke(wobot, 'getRooms')
+            .then(function(rooms) {
+                self.rooms = rooms[0];
+            });
+    };
+
+    /**
+     * Starts fetching the rooms at interval.
+     */
+    self.startFetching = function(interval) {
+        repeatId = setInterval(function() {
+            self.fetchRooms();
+        }, interval);
+    };
+
+    /**
+     * Stops fetching rooms.
+     */
+    self.stopFetching = function() {
+        clearInterval(repeatId);
+    };
 
     return self;
 };
