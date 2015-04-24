@@ -3,9 +3,9 @@ var debug = require('debug')('plugin:vote');
 
 /**
  * The vote plugin, a simple register voting.
- * @param {Object} bot The bot object as defined by the package wobot.
+ * @param {Object} bot The bot interface.
  */
-var Vote = function(bot, hipchatter, manager) {
+var Vote = function(bot) {
     var self = {
         name: 'Vote',
         polls: []
@@ -65,20 +65,24 @@ var Vote = function(bot, hipchatter, manager) {
     self.vote = function(channel, from, message) {
         var stripped = clean(_.pluck(self.listeners, 'pattern'), message).split(' ');
         var name = stripped[0];
+        var response;
         if (!self.polls[name]) {
-            bot.message(channel, 'The requested poll ' + name + ' is currently not available, please try again later. (after you made it...)');
+            response = 'The requested poll ' + name + ' is currently not available, please try again later. (after you made it...)';
         } else {
             if (/yes|aye|1/.test(stripped[1])) {
                 self.polls[name].yes++;
-                bot.message(channel, 'Your vote has been registered for ' + name + '!');
+                response = 'Your vote has been registered for ' + name + '!';
             } else if (/no|0/.test(stripped[1])) {
                 self.polls[name].no++;
-                bot.message(channel, 'You vote has been registered ' + name + '!');
+                response = 'You vote has been registered ' + name + '!';
             } else {
-                bot.message(channel, 'Either say \'yes\', \'aye\', \'1\' to vote yes, or \'no\', \'0\' to vote no');
+                response = 'Either say \'yes\', \'aye\', \'1\' to vote yes, or \'no\', \'0\' to vote no';
             }
         }
-        debug('a new vote');
+        bot.send({
+            jid: channel,
+            message: response
+        });
     };
 
     /**
@@ -88,13 +92,17 @@ var Vote = function(bot, hipchatter, manager) {
     self.poll = function(channel, from, message) {
         var stripped = clean(_.pluck(self.listeners, 'pattern'), message).split(' ');
         var name = stripped[0];
+        var response;
         if (!self.polls[name]) {
-            bot.message(channel, '404 ' + name + ' not found.');
+            response = '404 ' + name + ' not found.';
         } else {
             var result = self.polls[name];
-            bot.message(channel,
-                'The current score for: ' + name + ' are: ' + result.yes + ' voted yes and ' + result.no + ' voted no.');
+            response = 'The current score for: ' + name + ' are: ' + result.yes + ' voted yes and ' + result.no + ' voted no.';
         }
+        bot.send({
+            jid: channel,
+            message: response
+        });
     };
 
     /**
@@ -104,18 +112,22 @@ var Vote = function(bot, hipchatter, manager) {
     self.startPoll = function(channel, from, message) {
         var stripped = clean(_.pluck(self.listeners, 'pattern'), message).split(' ');
         var name = stripped[0];
+        var response;
         if (!name) {
-            bot.message(channel, 'You must pass a name when creating a new poll.');
+            response = 'You must pass a name when creating a new poll.';
         } else if (self.polls[name]) {
-            bot.message(channel, 'There is already a poll with the name ' + name + '.');
+            response = 'There is already a poll with the name ' + name + '.';
         } else {
             self.polls[name] = {
                 yes: 0,
                 no: 0
             };
-            bot.message(channel, 'Created the new poll ' + name + '.');
+            response = 'Created the new poll ' + name + '.';
         }
-        debug('starting a new poll');
+        bot.send({
+            jid: channel,
+            message: response
+        });
     };
 
     /**
@@ -137,18 +149,21 @@ var Vote = function(bot, hipchatter, manager) {
         var stripped = clean(_.pluck(self.listeners, 'pattern'), message).split(' ');
         var name = stripped[0];
         if (!self.polls[name]) {
-            bot.message(channel, 'Thou shall not end a poll which does not exists!');
+            bot.send({
+                jid: channel,
+                message: 'Thou shall not end a poll which does not exists!'
+            });
         } else {
-            var roomId = _.find(manager.rooms, {
-                jid: channel
-            }).id;
-            hipchatter.notify(roomId, {
+            bot.send({
+                jid: channel,
+                html: true,
                 color: 'random',
                 message: createMessage(self.polls[name], name)
-            }, function() {});
+            }).then(function() {}, function(error) {
+                debug('Failed to end the poll. The error was %j.', error);
+            });
             delete self.polls[name];
         }
-        debug('ending a poll');
     };
 
     return self;

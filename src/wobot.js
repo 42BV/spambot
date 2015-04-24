@@ -1,7 +1,7 @@
 var debug = require('debug')('wobot');
 
 // Defines the default behaviour on each possible event of wobot.
-module.exports = function() {
+module.exports = function(bot) {
     bot.onConnect(function() {
         debug('Connected');
     });

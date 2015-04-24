@@ -3,17 +3,16 @@ var sinon = require('sinon');
 var vote;
 var bot = {
     onMessage: function() {},
-    message: function() {}
-};
-var hipchatter = {
-    notify: function() {}
-};
-var manager = {
+    send: function() {
+        return {
+            then: function() {}
+        };
+    },
     rooms: []
 };
 describe('Vote', function() {
     beforeEach(function() {
-        vote = new Vote(bot, hipchatter, manager);
+        vote = new Vote(bot);
     });
     describe('#onMessage', function() {
         it('should call the correct function', function(done) {
@@ -55,34 +54,51 @@ describe('Vote', function() {
         });
     });
     describe('#endPoll', function() {
-        it('should give an error when stopping a non-existing poll', function(){
-            bot.message = sinon.spy();
+        it('should give an error when stopping a non-existing poll', function() {
+            bot.send = sinon.spy();
             vote.endPoll('channel', null, '!poll end theAwesomePollName');
-            bot.message.calledWith('channel', sinon.match(/Thou shall not/)).should.be.ok;
+            bot.send.calledWith({
+                jid: 'channel',
+                message: sinon.match(/Thou shall not/)
+            }).should.be.ok;
         });
         it('should properly stop a poll', function() {
             vote.startPoll(null, null, '!poll start theAwesomePollName');
-            hipchatter.notify = sinon.spy();
-            manager.rooms.push({
+            bot.send = sinon.stub();
+            bot.rooms.push({
                 jid: 'channel',
                 id: 1
             });
+            bot.send.returns({
+                then: function() {}
+            });
             vote.endPoll('channel', null, '!poll end theAwesomePollName');
             vote.polls.should.have.lengthOf(0);
-            hipchatter.notify.calledWith(1).should.be.ok;
+            bot.send.calledWith({
+                jid: 'channel',
+                html: true,
+                message: sinon.match.string,
+                color: sinon.match.string
+            }).should.be.ok;
         });
     });
     describe('#poll', function() {
         it('Should give an error when the poll does not exists', function() {
-            bot.message = sinon.spy();
+            bot.send = sinon.spy();
             vote.poll('channel', null, '!poll test');
-            bot.message.calledWith('channel', '404 test not found.').should.be.ok;
+            bot.send.calledWith({
+                jid: 'channel',
+                message: '404 test not found.'
+            }).should.be.ok;
         });
         it('Should return the poll info', function() {
             vote.startPoll(null, null, '!poll start awesome');
-            bot.message = sinon.spy();
+            bot.send = sinon.spy();
             vote.poll('channel', null, '!poll awesome');
-            bot.message.calledWith('channel', sinon.match(/The current score for/)).should.be.ok;
+            bot.send.calledWith({
+                jid: 'channel',
+                message: sinon.match(/The current score for/),
+            }).should.be.ok;
         });
     });
 });
