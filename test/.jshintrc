@@ -18,7 +18,9 @@
     "strict": false,
     "trailing": true,
     "smarttabs": true,
+    "expr": true,
     "globals": {
+        "sinon": true,
         "before": true,
         "after": true,
         "beforeEach": true,
