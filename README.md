@@ -1,5 +1,18 @@
-# spambot
-HipChat bot listening to webhooks and able to send instructions to HipChat via hipChatter. Node.js
+# Spambot
+HipChat bot listening to webhooks and xmpp events and able to send instructions to HipChat via the http api or the xmpp.
+
+# Install
+```git clone https://github.com/42BV/spambot.git```  
+```npm install``` 
+
+# Usage 
+```node src/app.js -u BOT_JID -p BOT_PASSWORD -k BOT_API_KEY```
+
+To get the jid of the bot, go to the [xmpp](https://www.hipchat.com/account/xmpp) page of hipchat.  
+For the api key, navigate to the [api](https://www.hipchat.com/account/api) page.
+
+# Plugin based
+The app is plugin based, that means that you can easily write your own plugin if you want. See the [plugins](src/plugins) for more information.
 
 License
 -------
