@@ -34,4 +34,4 @@ wobot.onDisconnect(function(){
 });
 
 // Set the default behaviour of the events of the wobot package
-require('./wobot.js')(bot);
+require('./wobot.js')(wobot);

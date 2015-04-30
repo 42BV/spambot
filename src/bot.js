@@ -18,7 +18,9 @@ module.exports = function(wobot, hipchatter) {
      *    // Do smh fancy
      *});```
      */
-    self.onMessage = wobot.onMessage;
+    self.onMessage = function(cb){
+        wobot.onMessage(cb);
+    };
 
     /**
      * Sends a message to a room or a person.
