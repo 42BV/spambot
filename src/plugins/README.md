@@ -5,7 +5,7 @@ All plugins are invoked with the [bot](../bot.js) interface. It has the hipchatt
 A template for a plugin looks like this:  
 ```javascript
 /**
- * The vote plugin, a simple register voting.
+ * A description of the plugin...
  * @param {Object} bot The bot interface.
  */
 module.exports = function(bot){
