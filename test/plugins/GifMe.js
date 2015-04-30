@@ -3,9 +3,7 @@ var fullResponse = '{"status":200,"meta":{"term":"yes","limit":1,"page":0,"total
 var sinon = require('sinon');
 var proxyquire = require('proxyquire').noPreserveCache();
 var stubs = {
-    request: function() {
-        console.log('asdf');
-    }
+    request: function() {}
 };
 var bot = {
     onMessage: function() {},
