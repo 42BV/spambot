@@ -30,7 +30,7 @@ module.exports = function(wobot, hipchatter) {
      * It should have either the id (used by the rest api (hipchatter)) or the jid (used by xmpp (wobot)).
      * @param {Object} options The object contain the message, id, jid, color or html flag.
      * @param {String} options.message The message. If it contains html tags, the html flag should be set.
-     * @param {Boolean} options.html Indicating if it is a htlm message or not.
+     * @param {Boolean} options.html Indicating if it is a html message or not.
      * @param {String} options.color Should be one of: 'yellow, green, red, purple, gray, random'.
      * @param {Number} options.roomId The id of the room.
      * @param {String} options.jid The jid of the room.
