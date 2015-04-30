@@ -6,10 +6,11 @@ HipChat bot listening to webhooks and xmpp events and able to send instructions 
 ```npm install``` 
 
 # Usage 
-```node src/app.js -u BOT_JID -p BOT_PASSWORD -k BOT_API_KEY```
-
+Create a ```default.json``` file under config. You can check the [example](config/test.json) file for which attributes should be set.  
 To get the jid of the bot, go to the [xmpp](https://www.hipchat.com/account/xmpp) page of hipchat.  
 For the api key, navigate to the [api](https://www.hipchat.com/account/api) page.
+
+When the config file is set correctly run ```node src/app.js```.
 
 # Plugin based
 The app is plugin based, that means that you can easily write your own plugin if you want. See the [plugins](src/plugins) for more information.
