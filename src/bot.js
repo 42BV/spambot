@@ -9,7 +9,8 @@ module.exports = function(wobot, hipchatter) {
     var self = {
         wobot: wobot,
         hipchatter: hipchatter,
-        rooms: []
+        rooms: [],
+        roomSettings:[]
     };
 
     /**
