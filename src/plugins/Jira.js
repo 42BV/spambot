@@ -5,7 +5,6 @@ var Q = require('q');
 var config = require('config');
 
 module.exports = function(bot) {
-
     var jiraApi = new JiraApi(config.jira.protocol, config.jira.domain, config.jira.port, config.jira.username, config.password, 2);
     var issuePattern = /issue (\w+\-\w+)/i;
     var self = {
@@ -34,10 +33,35 @@ module.exports = function(bot) {
     /**
      * Makes a link for the issue key.
      * @param {String} channel
-     * @param {String} from
-     * @param {String} message
+     * @param {String} issueKey
      */
-    self.makeLink = function() {
+    self.makeLink = function(channel, issueKey) {
+        bot.send({
+            jid: channel,
+            message: 'Fetching that sexy link for ' + issueKey + '.'
+        });
+        Q.ninvoke(jiraApi, 'findIssue', issueKey)
+            .then(function(issue) {
+                var link = '<a href="https://jira.42.nl/browse/' + issueKey + '">' + issueKey + '</a>';
+                var message = 'Where you guys talking about ' + link + '? Which is about ' + issue.fields.summary + '.';
+                bot.send({
+                    html: true,
+                    jid: channel,
+                    message: message
+                });
+            }, function(err) {
+                var message;
+                if (err === 'Invalid issue number.') {
+                    message = 'It seems you were talking about ' + issueKey + ' but that is an invalid issue key :/.';
+                } else {
+                    message = 'I tried to retrieve information about ' + issueKey + ' but something went wrong :(.';
+                    debugErr('Failed retrieving %s, the error says: %s.', issueKey, err);
+                }
+                bot.send({
+                    jid: channel,
+                    message: message
+                });
+            }).done();
     };
 
     /**
@@ -60,7 +84,6 @@ module.exports = function(bot) {
      */
     self.issuesDone = function(channel) {
         if (self.getCode(channel)) {
-            console.log(jiraApi);
             Q.ninvoke(jiraApi, 'searchJira', 'project in ("' + self.getCode(channel) + '") AND (status in (closed, resolved) OR resolutiondate >= -1d) ORDER BY Rank ASC', {
                 maxResults: 5
             }).then(function(response) {
