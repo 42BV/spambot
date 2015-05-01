@@ -31,7 +31,7 @@ module.exports = function(bot) {
                 if (body.data.length === 0) {
                     message += 'No gifs found for \'' + query + '\'.';
                 } else {
-                    message += encodeURIComponent(body.data[0].link);
+                    message += body.data[0].link.replace(' ', '%20');
                 }
             }
             bot.send({

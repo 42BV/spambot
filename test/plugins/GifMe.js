@@ -1,5 +1,5 @@
 var emptyResponse = '{"status":200,"meta":{"term":"r/filmgifsasdfasdfas","limit":1,"page":0,"total_pages":0,"total":0,"timing":"0.010s"},"data":[]}';
-var fullResponse = '{"status":200,"meta":{"term":"yes","limit":1,"page":0,"total_pages":2762,"total":2762,"timing":"0.014s"},"data":[{"id":425,"origin":"http://i.imgur.com/m10O2yh.gif","score":0,"nsfw":false,"link":"http://i.imgur.com/m10O2yh.gif","thumb":"http://i.gifme.io/gifme/_a39b6f4ead180e979e17.gif","created_at":"2013-08-14T00:54:24.685Z","tags":["yes"]}]}';
+var fullResponse = '{"status":200,"meta":{"term":"yes","limit":1,"page":0,"total_pages":2762,"total":2762,"timing":"0.014s"},"data":[{"id":425,"origin":"http://i.imgur.com/m10O2yh 1.gif","score":0,"nsfw":false,"link":"http://i.imgur.com/m10O2yh 1.gif","thumb":"http://i.gifme.io/gifme/_a39b6f4ead180e979e17.gif","created_at":"2013-08-14T00:54:24.685Z","tags":["yes"]}]}';
 var sinon = require('sinon');
 var proxyquire = require('proxyquire').noPreserveCache();
 var stubs = {
@@ -67,7 +67,7 @@ describe('GifMe', function() {
             })(bot);
 
             bot.send = function(msg) {
-                msg.should.have.property('message').with.match(/http%3A%2F%2Fi.imgur.com%2Fm10O2yh.gif/);
+                msg.should.have.property('message').with.match(/http:\/\/i.imgur.com\/m10O2yh%201.gif/);
                 done();
             };
             gifMe.gifme(null, 'me', '!gifme compiling');
