@@ -59,38 +59,80 @@ describe('jira', function() {
     describe('#makeLink', function() {
         it('should send a nice linky when the issue is found', function(done) {
             bot.send = sinon.spy();
+            var matchFirstCall = sinon.match({
+                jid: 'channel',
+                message: sinon.match(/fetching that sexy/i)
+            });
+            var matchSecondCall = sinon.match({
+                jid: 'channel',
+                html: true,
+                message: sinon.match(/where you guys talking/i)
+            });
+            bot.send.withArgs(matchFirstCall);
+            bot.send.withArgs(matchSecondCall);
             jiraApiStubs.findIssue = function(key, cb) {
                 cb(null, {
                     fields: {
                         summary: 'short description'
                     }
                 });
-                try {
-                    bot.send.calledOnce.should.be.ok;
-                    bot.send.calledWith({
-                        jid: 'channel',
-                        html: true,
-                        message: sinon.match(/Where you guys talking about/)
-                    }).should.be.ok;
-                } catch (e) {
-                    done(e);
-                }
             };
-            jira.makeLink('channel', 'TEST-1');
+            jira.makeLink('channel', 'TEST-1')
+                .then(function(){
+                    bot.send.calledTwice.should.be.ok;
+                    bot.send.withArgs(matchFirstCall).calledOnce.should.be.ok;
+                    bot.send.withArgs(matchSecondCall).calledOnce.should.be.ok;
+                    done();
+                }, done).done();
         });
         it('should state when an issue is not found that is invalid', function(done) {
+            var err = 'Invalid issue number.';
             bot.send = sinon.spy();
-
+            var matchFirstCall = sinon.match({
+                jid: 'channel',
+                message: sinon.match(/fetching that sexy/i)
+            });
+            var matchSecondCall = sinon.match({
+                jid: 'channel',
+                html: true,
+                message: sinon.match(/where you guys talking/i)
+            });
+            bot.send.withArgs(matchFirstCall);
+            bot.send.withArgs(matchSecondCall);
             jiraApiStubs.findIssue = function(key, cb) {
-                cb('Invalid issue number.');
-                bot.send.calledOnce.should.be.ok;
-                bot.send.calledWith({
-                    jid: 'channel',
-                    message: sinon.match(/an invalid issue key/)
-                }).should.be.ok;
-                done();
+                cb(err);
             };
-            jira.makeLink('channel', 'TEST-1');
+            jira.makeLink('channel', 'TEST-1')
+                .then(function(){
+                    done('should not succeed');
+                }, function(error){
+                    error.should.equal(err);
+                    done();
+                }).done();
+        });
+        it('should state that an error occured when the issue fetching went wrong', function(done){
+            bot.send = sinon.spy();
+            var matchFirstCall = sinon.match({
+                jid: 'channel',
+                message: sinon.match(/fetching that sexy/i)
+            });
+            var matchSecondCall = sinon.match({
+                jid: 'channel',
+                html: true,
+                message: sinon.match(/where you guys talking/i)
+            });
+            bot.send.withArgs(matchFirstCall);
+            bot.send.withArgs(matchSecondCall);
+            jiraApiStubs.findIssue = function(key, cb) {
+                cb(new Error('smh'));
+            };
+            jira.makeLink('channel', 'TEST-1')
+                .then(function(){
+                    done('should not succeed');
+                }, function(error){
+                    error.should.match(/I tried to retrieve information/i);
+                    done();
+                }).done();
         });
     });
     describe('#getCode', function() {
