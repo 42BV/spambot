@@ -22,17 +22,17 @@ describe('GifMe', function() {
 
         });
         it('should do nothing if the pattern does not match', function() {
-            gifMe.gifme = sinon.spy();
+            gifMe.search = sinon.spy();
             invokeCb(null, 'me', 'gifme compiling');
-            gifMe.gifme.called.should.fail;
+            gifMe.search.called.should.fail;
         });
         it('should call gifme once', function() {
-            var spy = sinon.spy(gifMe, 'gifme');
+            var spy = sinon.spy(gifMe, 'search');
             invokeCb(null, 'me', '!gifme compiling');
             spy.calledOnce.should.be.ok;
         });
     });
-    describe('#gifme', function() {
+    describe('#search', function() {
         it('should return that an error occured', function(done) {
             gifMe = proxyquire('../../src/plugins/GifMe.js', {
                 request: function(url, cb) {
@@ -44,7 +44,7 @@ describe('GifMe', function() {
                 msg.should.have.property('message').with.match(/An error/);
                 done();
             };
-            gifMe.gifme(null, 'me', '!gifme compiling');
+            gifMe.search(null, 'me', '!gifme compiling');
         });
         it('should return that there were no results', function(done) {
             gifMe = proxyquire('../../src/plugins/GifMe.js', {
@@ -57,7 +57,7 @@ describe('GifMe', function() {
                 msg.should.have.property('message').with.match(/No gifs/);
                 done();
             };
-            gifMe.gifme(null, 'me', '!gifme compiling');
+            gifMe.search(null, 'me', '!gifme compiling');
         });
         it('should return an encoded url', function(done) {
             gifMe = proxyquire('../../src/plugins/GifMe.js', {
@@ -70,7 +70,7 @@ describe('GifMe', function() {
                 msg.should.have.property('message').with.match(/http:\/\/i.imgur.com\/m10O2yh%201.gif/);
                 done();
             };
-            gifMe.gifme(null, 'me', '!gifme compiling');
+            gifMe.search(null, 'me', '!gifme compiling');
         });
     });
 });
