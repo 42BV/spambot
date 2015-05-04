@@ -36,6 +36,7 @@ module.exports = function(bot) {
      * @param {String} issueKey
      */
     self.makeLink = function(channel, issueKey) {
+        var deferred = Q.defer();
         bot.send({
             jid: channel,
             message: 'Fetching that sexy link for ' + issueKey + '.'
@@ -49,6 +50,7 @@ module.exports = function(bot) {
                     jid: channel,
                     message: message
                 });
+                deferred.resolve();
             }, function(err) {
                 var message;
                 if (err === 'Invalid issue number.') {
@@ -61,7 +63,9 @@ module.exports = function(bot) {
                     jid: channel,
                     message: message
                 });
-            }).done();
+                deferred.reject(err);
+            });
+        return deferred.promise;
     };
 
     /**
