@@ -4,11 +4,11 @@
   "description": "HipChat bot listening to webhooks and able to send instructions to HipChat via hipChatter. Node.js",
   "main": "app.js",
   "scripts": {
-    "test": "mocha -R spec -r should tests --recursive"
+    "test": "grunt"
   },
   "repository": {
     "type": "git",
-    "url": "https://Pouja@github.com/42bv/spambot"
+    "url": "https://github.com/42bv/spambot"
   },
   "keywords": [
     "nodejs",
@@ -23,13 +23,27 @@
   },
   "homepage": "https://github.com/42bv/spambot",
   "dependencies": {
+    "config": "^1.12.0",
     "debug": "^2.1.1",
     "hipchatter": "^0.2.0",
+    "jira": "git://github.com/Pouja/node-jira.git#master",
     "lodash": "^2.4.1",
-    "promise": "^6.1.0"
+    "request": "^2.55.0",
+    "wobot": "^0.8.1"
   },
   "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-blanket": "0.0.8",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-env": "^0.4.2",
+    "grunt-mocha-test": "^0.12.7",
+    "jshint-stylish": "^1.0.0",
     "mocha": "^2.1.0",
-    "should": "^4.6.0"
+    "should": "^4.6.5",
+    "sinon": "^1.14.1",
+    "time-grunt": "^1.0.0",
+    "travis-cov": "^0.2.5"
   }
 }

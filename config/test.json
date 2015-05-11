@@ -1,0 +1,11 @@
+{
+    "jira": {
+        "protocol": "https",
+        "domain": "jira.test.nl",
+        "port": 443,
+        "username": "john.doe"
+    },
+    "jid": "1234_1234@chat.hipchat.com",
+    "password": "secret",
+    "apiKey": "abcdABCD"
+}

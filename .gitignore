@@ -12,8 +12,9 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
+coverage.html
 
-# Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
+# Grunt intermediate storage
 .grunt
 
 # node-waf configuration
@@ -23,8 +24,10 @@ coverage
 build/Release
 
 # Dependency directory
-# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git-
 node_modules
 
 # Debug log from npm
 npm-debug.log
+
+# Config file which holds the username/password/jid
+config/default.json
