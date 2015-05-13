@@ -23,9 +23,9 @@ describe('GifMe', function() {
 
         });
         it('should do nothing if the pattern does not match', function() {
-            gifMe.gifme = sinon.spy();
+            gifMe.search = sinon.spy();
             invokeCb(null, 'me', 'gifme compiling');
-            gifMe.gifme.called.should.fail;
+            gifMe.search.called.should.fail;
         });
         it('should call search once', function() {
             var spy = sinon.spy(gifMe, 'search');

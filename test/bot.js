@@ -10,6 +10,7 @@ var hipchatter = {
     }
 };
 var wobot = {
+    onMessage: function() {},
     getRooms: function(cb) {
         cb(null, [
             [{
@@ -22,6 +23,14 @@ var wobot = {
 describe('bot', function() {
     beforeEach(function() {
         bot = new Bot(wobot, hipchatter);
+    });
+    describe('#onMessage', function() {
+        it('invoke wobot:onMessage on the argument', function() {
+            var f = function(){};
+            wobot.onMessage = sinon.spy();
+            bot.onMessage(f);
+            wobot.onMessage.calledWith(f).should.be.ok;
+        });
     });
     describe('#send', function() {
         it('should throw when message is not set', function() {

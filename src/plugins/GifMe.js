@@ -76,7 +76,6 @@ module.exports = function(bot) {
         if (self.patterns.random.test(message)) {
             self.random(channel, from, message);
         } else if(self.patterns.search.test(message)){
-            console.log('calling search ' + message);
             self.search(channel, from, message);
         }
     });
