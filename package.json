@@ -1,6 +1,6 @@
 {
   "name": "SpamBot",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "HipChat bot listening to webhooks and able to send instructions to HipChat via hipChatter. Node.js",
   "main": "src/app.js",
   "scripts": {
