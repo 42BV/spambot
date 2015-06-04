@@ -1,6 +1,6 @@
 # Plugin
 
-All plugins are invoked with the [bot](../bot.js) interface. It has the hipchatter (http api) and the wobot (xmpp) exposed and already initialized. You can either hook on the xmpp (like onMessage, onInvite etc.), you can find all the events [here](../wobot.js).
+All plugins are invoked with the [bot](../bot.js) interface. It has the hipchatter (http api) and the wobot (xmpp) exposed and already initialized. You can either hook on the xmpp (like onMessage, onInvite etc.), you can find all the events [here](../wobot.js) or make a http hook yourself, see [hipchatter](https://github.com/charltoons/hipchatter) for more info on that.
 
 A template for a plugin looks like this:  
 ```javascript
