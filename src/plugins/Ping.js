@@ -3,7 +3,6 @@
 * Sometimes you want to know if the bot still responds.
 * You can send a ping, it will sends a pong back.
 */
-
 module.exports = function(bot){
     bot.onMessage(function(channel, from, message){
         if(/ping/i.test(message)){

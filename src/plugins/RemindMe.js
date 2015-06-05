@@ -1,3 +1,8 @@
+/**
+* A remind me plugin.
+* Reminds the user after x minutes or hours the message that the user wants.
+* For example: remind me in 3 min: yeah it works. Will send after 3 minutes the message: "yeah it works".
+*/
 module.exports = function(bot) {
     var self = {
         name: 'RemindMe'
@@ -5,6 +10,11 @@ module.exports = function(bot) {
 
     var pattern = /^remind me in ([0-9]+) (min|minutes|hours):? (.*)/i;
 
+    /**
+    * Parses the messages and retrieves the minutes/hours and the message.
+    * @param {String} string
+    * @return {Object} containing the time and message.
+    */
     self.parseMessage = function(string) {
         var query = pattern.exec(string);
         var result = {
@@ -17,6 +27,11 @@ module.exports = function(bot) {
         return result;
     };
 
+    /**
+    * Sets the reminder.
+    * @param {String} from The jid of an user.
+    * @param {Object} reminder The reminder object, as returned by parseMessage.
+    */
     self.setReminder = function(from, reminder) {
         bot.send({
             jid: from,
