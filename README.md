@@ -1,4 +1,4 @@
-# Spambot
+# Spambot [![Build Status](https://travis-ci.org/42BV/spambot.svg?branch=master)](https://travis-ci.org/42BV/spambot)
 HipChat bot listening to webhooks and xmpp events and able to send instructions to HipChat via the http api or the xmpp.
 
 # Install
