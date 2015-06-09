@@ -1,6 +1,6 @@
 /**
- * A simple wobot plugin that will display a random
- * Chuck Norris joke on the command !chuck
+ * A simple wobot plugin that will display a sentence in yoda.
+ * Talk in yoda by: !yoda <<message>>
  */
 
 var request = require('request');
