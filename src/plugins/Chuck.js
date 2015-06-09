@@ -4,6 +4,7 @@
  */
 
 var request = require('request');
+var debugErr = require('debug')('plugin:chuck:error');
 
 module.exports = function(bot) {
 
@@ -16,6 +17,8 @@ module.exports = function(bot) {
               jid: channel,
               message: '@' + from.split(' ').join('') + ' ' + data.value.joke.replace('&quot;', '"')
           });
+        } else {
+          debugErr('Request failed with error %j.', error);
         }
       });
     }

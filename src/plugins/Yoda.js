@@ -5,6 +5,7 @@
 
 var request = require('request');
 var _ = require('lodash');
+var debugErr = require('debug')('plugin:yoda:error');
 
 module.exports = function(bot) {
 
@@ -24,6 +25,8 @@ module.exports = function(bot) {
               jid: channel,
               message: '@' + from.split(' ').join('') + ' ' + body
           });
+        } else {
+          debugErr('Request failed with error %j.', error);
         }
       });
     }
