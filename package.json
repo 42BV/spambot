@@ -27,7 +27,7 @@
     "debug": "^2.1.1",
     "hipchatter": "^0.2.0",
     "jira": "git://github.com/Pouja/node-jira.git#master",
-    "lodash": "^2.4.1",
+    "lodash": "^3.9.3",
     "q": "^1.4.1",
     "request": "^2.55.0",
     "wobot": "git://github.com/Pouja/wobot.git#master"
