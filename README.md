@@ -23,11 +23,11 @@ Some plugins only work in private chats, some only in group chats and some in bo
 `!gifme keywords` Searches up a gif matching the keywords, you can also do `!gifme random keywords` if you don't want the top result. SFW is enabled here, I\'m sorry, you can file a PR if you want to change it.  
 `issue XXXX-123` Will give you a link to the issue, if you set the `code` property in the channel you can just reference it with: `blalbla TEST-301 blabla`.
 `what did we do` When to channel `code` property is set, will give you the last 5 resolved/closed issues.   
-`!poll start/end name` will start or stop a poll with the given name.  
+`!poll start|end name` will start or stop a poll with the given name.  
 `!vote name yes|no` will vote yes or no for the poll with the given name.  
 
 ## Private only commands
-`remind me in X min/minutes/hours: message` Will remind you after X minutes or hours the message.
+`remind me in X min|minutes|hours: message` Will remind you after X minutes or hours the message.
 
 License
 -------
