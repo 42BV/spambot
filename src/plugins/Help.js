@@ -1,5 +1,3 @@
-var _ = require('lodash');
-
 module.exports = function(bot) {
     var self = {
         name: 'help',
@@ -16,7 +14,7 @@ module.exports = function(bot) {
         if (self.pattern.test(message)) {
             bot.send({
                 jid: channel,
-                message: makeMessage,
+                message: helpMessage,
                 html: false
             });
         }
